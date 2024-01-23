@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         child: ElevatedButton(
           onPressed: (){
             print(villes);
-            addVille("Rouen");
+            addVille("Lille");
             print(villes);
           },
           child: Text("Ajout Ville"),
@@ -52,6 +52,13 @@ class _HomePageState extends State<HomePage> {
     }
     villes.add(ville);
     SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setStringList("villes", villes);
+    getVilles();
+  }
+
+  void deleteVille(String ville) async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    villes.remove(ville);
     await preferences.setStringList("villes", villes);
     getVilles();
   }
