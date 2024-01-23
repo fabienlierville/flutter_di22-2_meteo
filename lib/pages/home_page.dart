@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:meteo/models/device_info.dart';
+import 'package:meteo/models/weather.dart';
 import 'package:meteo/services/geocoder_service.dart';
+import 'package:meteo/services/weather_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,14 +14,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> villes = [];
+  Weather? weather;
+  String? villeChoisie;
 
   @override
   void initState(){
     super.initState();
     getVilles();
-    print(DeviceInfo.locationData);
-    print(DeviceInfo.ville);
-
+    getMeteo(DeviceInfo.ville!);
   }
 
   @override
@@ -53,7 +55,9 @@ class _HomePageState extends State<HomePage> {
                   )
               ),
               ListTile(
-                onTap: null,
+                onTap: (){
+                  getMeteo(DeviceInfo.ville!);
+                },
                 title: Text(DeviceInfo.ville ?? "Position Inconnue", style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
               ),
               Expanded(
@@ -62,7 +66,9 @@ class _HomePageState extends State<HomePage> {
                       itemBuilder: (BuildContext context, int index) {
                         String ville = villes[index];
                         return ListTile(
-                          onTap: null,
+                          onTap: (){
+                            getMeteo(ville);
+                          },
                           title: Text(ville, style: TextStyle(color: Colors.white),textAlign: TextAlign.center,),
                           trailing: IconButton(
                               icon: Icon(Icons.delete, color: Colors.white,),
@@ -77,17 +83,36 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
     ),
-    body: Center(
-        child: ElevatedButton(
-          onPressed: () async{
-            GeocoderService geocoderService = GeocoderService();
-            Map<String,double>? location = await geocoderService.getCoordinatesFromAddress(ville: DeviceInfo.ville!);
-            print(location);
-          },
-          child: Text("Ajout Ville"),
-        ),
-      ),
+    body: (weather == null) ?
+    Center(
+        child: Text("PAs de météo dispo"),
+      )
+        :
+    Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage(weather!.backgroundPicture()),
+              fit: BoxFit.cover)),
+    ),
+
     );
+  }
+
+  Future<void> getMeteo(String ville) async{
+    GeocoderService geocoderService = GeocoderService();
+    Map<String,double>? location = await geocoderService.getCoordinatesFromAddress(ville: ville);
+    if(location !=null){
+      WeatherService weatherService = WeatherService();
+      Weather? w = await weatherService.getCurrentWeather(latitude: location["latitude"]!, longitude: location["longitude"]!);
+      if(w != null){
+        setState(() {
+          weather = w;
+          villeChoisie = ville;
+        });
+      }
+    }
   }
 
   void getVilles() async{

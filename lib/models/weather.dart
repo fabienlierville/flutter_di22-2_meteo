@@ -9,49 +9,49 @@ Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
 String weatherToJson(Weather data) => json.encode(data.toJson());
 
 class Weather {
-  Coord coord;
-  List<WeatherElement> weather;
-  String base;
-  Main main;
-  int visibility;
-  Wind wind;
-  Rain rain;
-  Clouds clouds;
-  int dt;
-  Sys sys;
-  int timezone;
-  int id;
-  String name;
-  int cod;
+  Coord? coord;
+  List<WeatherElement>? weather;
+  String? base;
+  Main? main;
+  int? visibility;
+  Wind? wind;
+  Rain? rain;
+  Clouds? clouds;
+  int? dt;
+  Sys? sys;
+  int? timezone;
+  int? id;
+  String? name;
+  int? cod;
 
   Weather({
-    required this.coord,
-    required this.weather,
-    required this.base,
-    required this.main,
-    required this.visibility,
-    required this.wind,
-    required this.rain,
-    required this.clouds,
-    required this.dt,
-    required this.sys,
-    required this.timezone,
-    required this.id,
-    required this.name,
-    required this.cod,
+    this.coord,
+    this.weather,
+    this.base,
+    this.main,
+    this.visibility,
+    this.wind,
+    this.rain,
+    this.clouds,
+    this.dt,
+    this.sys,
+    this.timezone,
+    this.id,
+    this.name,
+    this.cod,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
-    coord: Coord.fromJson(json["coord"]),
-    weather: List<WeatherElement>.from(json["weather"].map((x) => WeatherElement.fromJson(x))),
+    coord: json["coord"] == null ? null : Coord.fromJson(json["coord"]),
+    weather: json["weather"] == null ? [] : List<WeatherElement>.from(json["weather"]!.map((x) => WeatherElement.fromJson(x))),
     base: json["base"],
-    main: Main.fromJson(json["main"]),
+    main: json["main"] == null ? null : Main.fromJson(json["main"]),
     visibility: json["visibility"],
-    wind: Wind.fromJson(json["wind"]),
-    rain: Rain.fromJson(json["rain"]),
-    clouds: Clouds.fromJson(json["clouds"]),
+    wind: json["wind"] == null ? null : Wind.fromJson(json["wind"]),
+    rain: json["rain"] == null ? null : Rain.fromJson(json["rain"]),
+    clouds: json["clouds"] == null ? null : Clouds.fromJson(json["clouds"]),
     dt: json["dt"],
-    sys: Sys.fromJson(json["sys"]),
+    sys: json["sys"] == null ? null : Sys.fromJson(json["sys"]),
     timezone: json["timezone"],
     id: json["id"],
     name: json["name"],
@@ -59,28 +59,41 @@ class Weather {
   );
 
   Map<String, dynamic> toJson() => {
-    "coord": coord.toJson(),
-    "weather": List<dynamic>.from(weather.map((x) => x.toJson())),
+    "coord": coord?.toJson(),
+    "weather": weather == null ? [] : List<dynamic>.from(weather!.map((x) => x.toJson())),
     "base": base,
-    "main": main.toJson(),
+    "main": main?.toJson(),
     "visibility": visibility,
-    "wind": wind.toJson(),
-    "rain": rain.toJson(),
-    "clouds": clouds.toJson(),
+    "wind": wind?.toJson(),
+    "rain": rain?.toJson(),
+    "clouds": clouds?.toJson(),
     "dt": dt,
-    "sys": sys.toJson(),
+    "sys": sys?.toJson(),
     "timezone": timezone,
     "id": id,
     "name": name,
     "cod": cod,
   };
+
+  String backgroundPicture(){
+    if(weather![0].icon!.contains("n.")){
+      //Si il fait nuit (ex assets/images/02n.png) je retourne le fond "Nuit"
+      return "assets/images/n.jpg";
+    }else if(weather![0].icon!.contains("/01") || weather![0].icon!.contains("/02") || weather![0].icon!.contains("/03")){
+      //Si il fait beau (ex assets/images/02.png) je retourne ce fond
+      return "assets/images/d1.jpg";
+    }else{
+      //Sinon c'est mauvais temps
+      return "assets/images/d2.jpg";
+    }
+  }
 }
 
 class Clouds {
-  int all;
+  int? all;
 
   Clouds({
-    required this.all,
+    this.all,
   });
 
   factory Clouds.fromJson(Map<String, dynamic> json) => Clouds(
@@ -93,12 +106,12 @@ class Clouds {
 }
 
 class Coord {
-  double lon;
-  double lat;
+  double? lon;
+  double? lat;
 
   Coord({
-    required this.lon,
-    required this.lat,
+    this.lon,
+    this.lat,
   });
 
   factory Coord.fromJson(Map<String, dynamic> json) => Coord(
@@ -113,24 +126,24 @@ class Coord {
 }
 
 class Main {
-  double temp;
-  double feelsLike;
-  double tempMin;
-  double tempMax;
-  int pressure;
-  int humidity;
-  int seaLevel;
-  int grndLevel;
+  double? temp;
+  double? feelsLike;
+  double? tempMin;
+  double? tempMax;
+  int? pressure;
+  int? humidity;
+  int? seaLevel;
+  int? grndLevel;
 
   Main({
-    required this.temp,
-    required this.feelsLike,
-    required this.tempMin,
-    required this.tempMax,
-    required this.pressure,
-    required this.humidity,
-    required this.seaLevel,
-    required this.grndLevel,
+    this.temp,
+    this.feelsLike,
+    this.tempMin,
+    this.tempMax,
+    this.pressure,
+    this.humidity,
+    this.seaLevel,
+    this.grndLevel,
   });
 
   factory Main.fromJson(Map<String, dynamic> json) => Main(
@@ -157,10 +170,10 @@ class Main {
 }
 
 class Rain {
-  double the1H;
+  double? the1H;
 
   Rain({
-    required this.the1H,
+    this.the1H,
   });
 
   factory Rain.fromJson(Map<String, dynamic> json) => Rain(
@@ -173,18 +186,18 @@ class Rain {
 }
 
 class Sys {
-  int type;
-  int id;
-  String country;
-  int sunrise;
-  int sunset;
+  int? type;
+  int? id;
+  String? country;
+  int? sunrise;
+  int? sunset;
 
   Sys({
-    required this.type,
-    required this.id,
-    required this.country,
-    required this.sunrise,
-    required this.sunset,
+    this.type,
+    this.id,
+    this.country,
+    this.sunrise,
+    this.sunset,
   });
 
   factory Sys.fromJson(Map<String, dynamic> json) => Sys(
@@ -205,16 +218,16 @@ class Sys {
 }
 
 class WeatherElement {
-  int id;
-  String main;
-  String description;
-  String icon;
+  int? id;
+  String? main;
+  String? description;
+  String? icon;
 
   WeatherElement({
-    required this.id,
-    required this.main,
-    required this.description,
-    required this.icon,
+    this.id,
+    this.main,
+    this.description,
+    this.icon,
   });
 
   factory WeatherElement.fromJson(Map<String, dynamic> json) => WeatherElement(
@@ -233,14 +246,14 @@ class WeatherElement {
 }
 
 class Wind {
-  double speed;
-  int deg;
-  double gust;
+  double? speed;
+  int? deg;
+  double? gust;
 
   Wind({
-    required this.speed,
-    required this.deg,
-    required this.gust,
+    this.speed,
+    this.deg,
+    this.gust,
   });
 
   factory Wind.fromJson(Map<String, dynamic> json) => Wind(
