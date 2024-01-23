@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     getVilles();
     print(DeviceInfo.locationData);
+    print(DeviceInfo.ville);
   }
 
   @override
