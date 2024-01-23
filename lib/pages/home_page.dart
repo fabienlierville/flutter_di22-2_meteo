@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meteo/models/device_info.dart';
+import 'package:meteo/services/geocoder_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,11 +14,12 @@ class _HomePageState extends State<HomePage> {
   List<String> villes = [];
 
   @override
-  void initState() {
+  void initState(){
     super.initState();
     getVilles();
     print(DeviceInfo.locationData);
     print(DeviceInfo.ville);
+
   }
 
   @override
@@ -77,10 +79,10 @@ class _HomePageState extends State<HomePage> {
     ),
     body: Center(
         child: ElevatedButton(
-          onPressed: (){
-            print(villes);
-            addVille("Lille");
-            print(villes);
+          onPressed: () async{
+            GeocoderService geocoderService = GeocoderService();
+            Map<String,double>? location = await geocoderService.getCoordinatesFromAddress(ville: DeviceInfo.ville!);
+            print(location);
           },
           child: Text("Ajout Ville"),
         ),

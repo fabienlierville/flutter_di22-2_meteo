@@ -20,4 +20,24 @@ class GeocoderService{
     }
     return null;
   }
+
+  Future<Map<String,double>?> getCoordinatesFromAddress({required String ville}) async{
+
+    String completeUrl = "${baseURL}direct?q=${ville}&appid=${apiKey}";
+    final response = await http.get(
+        Uri.parse(completeUrl),
+        headers: {
+          'Content-Type':'application/json'
+        }
+    );
+
+    if(response.statusCode == 200){
+      List<dynamic> json = jsonDecode(response.body);
+      return {
+        "latitude": json.first["lat"],
+        "longitude": json.first["lon"],
+      };
+    }
+    return null;
+  }
 }
