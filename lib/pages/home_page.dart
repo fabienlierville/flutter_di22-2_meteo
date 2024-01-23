@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meteo/models/device_info.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getVilles();
+    print(DeviceInfo.locationData);
   }
 
   @override
