@@ -9,7 +9,8 @@ class WeatherService{
 
   Future<Weather?> getCurrentWeather({required double latitude, required double longitude}) async{
 
-    String completeUrl = "${baseURL}weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}";
+    String completeUrl = "${baseURL}weather?units=metric&lat=${latitude}&lon=${longitude}&appid=${apiKey}";
+    print(completeUrl);
     final response = await http.get(
         Uri.parse(completeUrl),
         headers: {

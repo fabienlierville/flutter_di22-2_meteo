@@ -78,15 +78,21 @@ class Weather {
   String backgroundPicture(){
     if(weather![0].icon!.contains("n.")){
       //Si il fait nuit (ex assets/images/02n.png) je retourne le fond "Nuit"
-      return "assets/images/n.jpg";
+      return "assets/img/n.jpg";
     }else if(weather![0].icon!.contains("/01") || weather![0].icon!.contains("/02") || weather![0].icon!.contains("/03")){
       //Si il fait beau (ex assets/images/02.png) je retourne ce fond
-      return "assets/images/d1.jpg";
+      return "assets/img/d1.jpg";
     }else{
       //Sinon c'est mauvais temps
-      return "assets/images/d2.jpg";
+      return "assets/img/d2.jpg";
     }
   }
+
+  String getIconeImage(){
+    String logo = weather![0].icon!.replaceAll("d", "").replaceAll("n", "");
+    return "assets/img/$logo.png";
+  }
+
 }
 
 class Clouds {
